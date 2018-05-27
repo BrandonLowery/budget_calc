@@ -67,9 +67,25 @@ for counter in 9..last - 1 # apparently MUST use counter instead of i
   arr2 << arr[counter]
 end
 
-final_income = sadness(post_car, arr2)
+debt = 0.0 # adds up your min debt payments
+arr2.each { |num| debt = num + debt } # debt += num.to_f }
 
-puts 'Your discretionary income is: ', final_income
+arr[9] = debt # sets min debt to 1 field
+arr = arr[0..9] # removes debt already totaled
+arr.delete_at(7) # deletes ele 7, which is % saved for retirement
 
-# NEXT NEED TO ADD AUTO EXPORT TO CSV , just google ruby variable to CSV
-# probably put everything into an array and export to csv
+final_income = sadness(post_car, arr2) # subtracts your min debt payments
+
+# export to CSV
+header = %w[Income Rent Water Electric Rent_Insurance Groceries Car_Payment
+            Car_Insurance Min_Debt_Payments Discretionary_Income]
+
+final = arr + [final_income - debt]
+
+require 'csv'
+CSV.open('budget.csv', 'w') do |csv|
+  csv << header
+  csv << final
+end
+
+puts 'Done'
