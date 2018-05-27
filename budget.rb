@@ -15,7 +15,21 @@
 # fed inc tax will be flat for testing, to be made real later
 
 def taxes(income)
-  income * 0.85 # flat 15% tax, will change to irl later
+  # set up tax brackets for 2018
+  code = 0 if income <= 9525
+  code = 1 if income > 9525 and income < 38701
+  code = 2 if income > 38700 and income < 82501
+  code = 3 if income > 82500 and income < 157500
+  # if you make more than this pay me and ill support your bracket ;)
+  total = income * 0.1 if code == 0 # tax for code 0
+  total = (9525 * 0.1) if code > 0
+  total += (income - 9525) * 0.12 if code == 1
+  total += (38700 - 9526) * 0.12 if code > 1
+  total += (income - 38701) * 0.22 if code == 2
+  total += (82500 - 38701) * 0.22 if code > 2
+  total += (income - 82501) * 0.24 if code == 3
+
+  income - total  # return val
 end
 
 def housing(income, rent, water, elec, insur)
@@ -31,7 +45,7 @@ def car(income, car_p, car_i)
 end
 
 def responsible(income, future_happiness)
-  income * 100 - future_happiness # sets back some for old you!
+  income * (0.01 * (100 - future_happiness)) # sets back some for old you!
 end
 
 def sadness(income, debt)
@@ -61,7 +75,7 @@ post_food = food(post_housing, arr[5])
 post_car = car(post_food, arr[6], arr[7])
 
 # block to calc debts
-arr2 = [] # array for debt
+arr2 = [0] # array for debt
 last = arr.length
 for counter in 9..last - 1 # apparently MUST use counter instead of i
   arr2 << arr[counter]
@@ -71,8 +85,8 @@ debt = 0.0 # adds up your min debt payments
 arr2.each { |num| debt = num + debt } # debt += num.to_f }
 
 arr[9] = debt # sets min debt to 1 field
-arr = arr[0..9] # removes debt already totaled
-arr.delete_at(7) # deletes ele 7, which is % saved for retirement
+arr = arr[0..9] # removes debt, already totaled
+arr.delete_at(8) # deletes ele 7, which is % saved for retirement
 
 final_income = sadness(post_car, arr2) # subtracts your min debt payments
 
