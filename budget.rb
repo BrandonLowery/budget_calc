@@ -12,8 +12,6 @@
 # 8. is % of income set back in month for retirement
 # any remaining line is min payment on a debt owed
 
-# fed inc tax will be flat for testing, to be made real later
-
 def taxes(income)
   # set up tax brackets for 2018
   code = 0 if income <= 9525
