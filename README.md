@@ -14,4 +14,6 @@ Format for text file input:
  6. is car payment if exists monthly
  7. is car insurance
  8. is % of income set back in month for retirement
+
+lines 9 +
  any remaining line is min payment on a debt owed
